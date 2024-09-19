@@ -17,6 +17,9 @@ enum Constants {
 }
 
 class OAuthService: ObservableObject {
+
+    @Published var isLogin: Bool = false
+
     @Published var oauthToken: OAuthToken?
     @Published var memberInfo: MemberInfo?
 
@@ -69,6 +72,7 @@ class OAuthService: ObservableObject {
 
     func getMember() {
         guard oauthToken != nil else { return }
+        isLogin = true
 
         let request = GraphQLRequest<Response<MemberInfo>>(
             query: """
@@ -87,9 +91,9 @@ class OAuthService: ObservableObject {
                 """, variables: [:])
         Session.send(request) { result in
             DispatchQueue.main.async {
+                self.isLogin = false
                 switch result {
                 case .success(let response):
-                    print("self.memberInfo: \(response.data)")
                     self.memberInfo = response.data
                 case .failure(let error):
                     print("error: \(error.localizedDescription)")
@@ -130,9 +134,11 @@ extension OAuthService {
         do {
             if let token {
                 let token = try JSONEncoder().encode(token)
-                UserDefaults.standard.set(token, forKey: Constants.kTokenStorageKey)
+                UserDefaults.standard.set(
+                    token, forKey: Constants.kTokenStorageKey)
             } else {
-                UserDefaults.standard.removeObject(forKey: Constants.kTokenStorageKey)
+                UserDefaults.standard.removeObject(
+                    forKey: Constants.kTokenStorageKey)
             }
         } catch {
             print("UserDefaults save token error: \(error)")
@@ -141,11 +147,16 @@ extension OAuthService {
 
     
     private func getToken() -> OAuthToken? {
-        guard let tokenData = UserDefaults.standard.data(forKey: Constants.kTokenStorageKey) else {
+        guard
+            let tokenData = UserDefaults.standard.data(
+                forKey: Constants.kTokenStorageKey)
+        else {
             return nil
         }
         do {
-            let token = try JSONDecoder().decode(OAuthToken.self, from: tokenData)
+            let token = try JSONDecoder().decode(
+                OAuthToken.self, from: tokenData)
+            // 判断过期
             return token
         } catch {
             print("UserDefaults get token error: \(error)")
