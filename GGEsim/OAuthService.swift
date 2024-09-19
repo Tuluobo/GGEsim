@@ -109,7 +109,9 @@ extension OAuthService {
             "code_verifier": codeVerifier,
         ]
 
-        let request = AccessTokenRequest(clientId: OAuth.clientId, clientSecret: OAuth.clientSecret, data: data)
+        let request = AccessTokenRequest(
+            clientId: OAuth.clientId, clientSecret: OAuth.clientSecret,
+            data: data)
         Session.send(request) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -137,7 +139,7 @@ extension OAuthService {
         }
     }
 
-    @discardableResult
+    
     private func getToken() -> OAuthToken? {
         guard let tokenData = UserDefaults.standard.data(forKey: Constants.kTokenStorageKey) else {
             return nil

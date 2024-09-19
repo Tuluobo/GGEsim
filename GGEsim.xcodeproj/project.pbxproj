@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D270D7062C9B17A600C0F1A3 /* ApplyEsimService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */; };
+		D270D7082C9B17F400C0F1A3 /* EmailVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */; };
+		D270D70A2C9B1EF600C0F1A3 /* QRcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7092C9B1EF600C0F1A3 /* QRcode.swift */; };
 		D2DC77B12C9A99F300704ADB /* Boot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77B02C9A99F300704ADB /* Boot.swift */; };
 		D2DC77B32C9A99F300704ADB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77B22C9A99F300704ADB /* ContentView.swift */; };
 		D2DC77B52C9A99F400704ADB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2DC77B42C9A99F400704ADB /* Assets.xcassets */; };
@@ -21,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyEsimService.swift; sourceTree = "<group>"; };
+		D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationView.swift; sourceTree = "<group>"; };
+		D270D7092C9B1EF600C0F1A3 /* QRcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRcode.swift; sourceTree = "<group>"; };
 		D2DC77AD2C9A99F300704ADB /* GGEsim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GGEsim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2DC77B02C9A99F300704ADB /* Boot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Boot.swift; sourceTree = "<group>"; };
 		D2DC77B22C9A99F300704ADB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -70,6 +76,8 @@
 				D2DC77B02C9A99F300704ADB /* Boot.swift */,
 				D2DC77B22C9A99F300704ADB /* ContentView.swift */,
 				D2DC77CC2C9AAC6600704ADB /* OAuthService.swift */,
+				D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */,
+				D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */,
 				D2DC77CB2C9AABF700704ADB /* Representable */,
 				D2DC77C32C9AA6EB00704ADB /* Network */,
 				D2DC77D02C9AB84100704ADB /* Utils */,
@@ -119,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				D2DC77CE2C9AB83700704ADB /* PKCE.swift */,
+				D270D7092C9B1EF600C0F1A3 /* QRcode.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -201,7 +210,10 @@
 			files = (
 				D2DC77C52C9AA70400704ADB /* Base.swift in Sources */,
 				D2DC77B32C9A99F300704ADB /* ContentView.swift in Sources */,
+				D270D7082C9B17F400C0F1A3 /* EmailVerificationView.swift in Sources */,
+				D270D7062C9B17A600C0F1A3 /* ApplyEsimService.swift in Sources */,
 				D2DC77B12C9A99F300704ADB /* Boot.swift in Sources */,
+				D270D70A2C9B1EF600C0F1A3 /* QRcode.swift in Sources */,
 				D2DC77CD2C9AAC6600704ADB /* OAuthService.swift in Sources */,
 				D2DC77CF2C9AB83700704ADB /* PKCE.swift in Sources */,
 				D2DC77C72C9AA96400704ADB /* OAuth.swift in Sources */,
