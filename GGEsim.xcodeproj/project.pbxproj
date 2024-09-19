@@ -11,6 +11,13 @@
 		D2DC77B32C9A99F300704ADB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77B22C9A99F300704ADB /* ContentView.swift */; };
 		D2DC77B52C9A99F400704ADB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2DC77B42C9A99F400704ADB /* Assets.xcassets */; };
 		D2DC77B92C9A99F400704ADB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2DC77B82C9A99F400704ADB /* Preview Assets.xcassets */; };
+		D2DC77C22C9AA07400704ADB /* APIKit in Frameworks */ = {isa = PBXBuildFile; productRef = D2DC77C12C9AA07400704ADB /* APIKit */; };
+		D2DC77C52C9AA70400704ADB /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77C42C9AA70400704ADB /* Base.swift */; };
+		D2DC77C72C9AA96400704ADB /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77C62C9AA96400704ADB /* OAuth.swift */; };
+		D2DC77CA2C9AABD900704ADB /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77C92C9AABD900704ADB /* SafariView.swift */; };
+		D2DC77CD2C9AAC6600704ADB /* OAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77CC2C9AAC6600704ADB /* OAuthService.swift */; };
+		D2DC77CF2C9AB83700704ADB /* PKCE.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77CE2C9AB83700704ADB /* PKCE.swift */; };
+		D2DC77D22C9AB88900704ADB /* GraphQLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77D12C9AB88900704ADB /* GraphQLRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +27,13 @@
 		D2DC77B42C9A99F400704ADB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2DC77B62C9A99F400704ADB /* GGEsim.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GGEsim.entitlements; sourceTree = "<group>"; };
 		D2DC77B82C9A99F400704ADB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D2DC77C42C9AA70400704ADB /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
+		D2DC77C62C9AA96400704ADB /* OAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth.swift; sourceTree = "<group>"; };
+		D2DC77C82C9AAB7B00704ADB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D2DC77C92C9AABD900704ADB /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
+		D2DC77CC2C9AAC6600704ADB /* OAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthService.swift; sourceTree = "<group>"; };
+		D2DC77CE2C9AB83700704ADB /* PKCE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCE.swift; sourceTree = "<group>"; };
+		D2DC77D12C9AB88900704ADB /* GraphQLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2DC77C22C9AA07400704ADB /* APIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +69,10 @@
 			children = (
 				D2DC77B02C9A99F300704ADB /* Boot.swift */,
 				D2DC77B22C9A99F300704ADB /* ContentView.swift */,
+				D2DC77CC2C9AAC6600704ADB /* OAuthService.swift */,
+				D2DC77CB2C9AABF700704ADB /* Representable */,
+				D2DC77C32C9AA6EB00704ADB /* Network */,
+				D2DC77D02C9AB84100704ADB /* Utils */,
 				D2DC77BF2C9A9A7100704ADB /* Supporting Files */,
 			);
 			path = GGEsim;
@@ -70,11 +89,38 @@
 		D2DC77BF2C9A9A7100704ADB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D2DC77C82C9AAB7B00704ADB /* Info.plist */,
 				D2DC77B42C9A99F400704ADB /* Assets.xcassets */,
 				D2DC77B62C9A99F400704ADB /* GGEsim.entitlements */,
 				D2DC77B72C9A99F400704ADB /* Preview Content */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D2DC77C32C9AA6EB00704ADB /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				D2DC77C42C9AA70400704ADB /* Base.swift */,
+				D2DC77C62C9AA96400704ADB /* OAuth.swift */,
+				D2DC77D12C9AB88900704ADB /* GraphQLRequest.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		D2DC77CB2C9AABF700704ADB /* Representable */ = {
+			isa = PBXGroup;
+			children = (
+				D2DC77C92C9AABD900704ADB /* SafariView.swift */,
+			);
+			path = Representable;
+			sourceTree = "<group>";
+		};
+		D2DC77D02C9AB84100704ADB /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				D2DC77CE2C9AB83700704ADB /* PKCE.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,6 +139,9 @@
 			dependencies = (
 			);
 			name = GGEsim;
+			packageProductDependencies = (
+				D2DC77C12C9AA07400704ADB /* APIKit */,
+			);
 			productName = GGEsim;
 			productReference = D2DC77AD2C9A99F300704ADB /* GGEsim.app */;
 			productType = "com.apple.product-type.application";
@@ -121,6 +170,9 @@
 				Base,
 			);
 			mainGroup = D2DC77A42C9A99F300704ADB;
+			packageReferences = (
+				D2DC77C02C9AA07400704ADB /* XCRemoteSwiftPackageReference "APIKit" */,
+			);
 			productRefGroup = D2DC77AE2C9A99F300704ADB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -147,8 +199,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2DC77C52C9AA70400704ADB /* Base.swift in Sources */,
 				D2DC77B32C9A99F300704ADB /* ContentView.swift in Sources */,
 				D2DC77B12C9A99F300704ADB /* Boot.swift in Sources */,
+				D2DC77CD2C9AAC6600704ADB /* OAuthService.swift in Sources */,
+				D2DC77CF2C9AB83700704ADB /* PKCE.swift in Sources */,
+				D2DC77C72C9AA96400704ADB /* OAuth.swift in Sources */,
+				D2DC77CA2C9AABD900704ADB /* SafariView.swift in Sources */,
+				D2DC77D22C9AB88900704ADB /* GraphQLRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,8 +336,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GGEsim/Preview Content\"";
+				DEVELOPMENT_TEAM = DD474WPLV8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GGEsim/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -314,8 +374,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GGEsim/Preview Content\"";
+				DEVELOPMENT_TEAM = DD474WPLV8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GGEsim/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -363,6 +425,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D2DC77C02C9AA07400704ADB /* XCRemoteSwiftPackageReference "APIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ishkawa/APIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D2DC77C12C9AA07400704ADB /* APIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2DC77C02C9AA07400704ADB /* XCRemoteSwiftPackageReference "APIKit" */;
+			productName = APIKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D2DC77A52C9A99F300704ADB /* Project object */;
 }
