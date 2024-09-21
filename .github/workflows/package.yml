@@ -1,0 +1,58 @@
+name: Build and Package iOS App
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  package:
+    name: Build and package iOS app
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+    
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode.app
+
+      - name: Modify Info.plist
+        run: |
+          /usr/libexec/PlistBuddy -c "Set :kGuideDocURLKey ${{ secrets.GUIDE_DOC_URL }}" ./GGEsim/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :kClientIdKey ${{ secrets.GG_CLIENT_ID }}" ./GGEsim/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :kClientSecretKey ${{ secrets.GG_CLIENT_SECRET }}" ./GGEsim/Info.plist
+      
+      - name: Build iOS app
+        run: |
+          xcodebuild clean archive -scheme "GGEsim" -archivePath $PWD/build/GGEsim.xcarchive -sdk iphoneos -configuration Release BUILD_LIBRARIES_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO CODE_SIGNING_ALLOWED=NO
+        
+      - name: Create IPA
+        run: |
+          mkdir -p $PWD/build/Payload
+          cp -R $PWD/build/GGEsim.xcarchive/Products/Applications/GGEsim.app $PWD/build/Payload
+          cd $PWD/build
+          /usr/bin/zip -r GGEsim.ipa Payload
+          rm -rf Payload
+        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/GGEsim.ipa
+          asset_name: GGEsim.ipa
+          asset_content_type: application/octet-stream
