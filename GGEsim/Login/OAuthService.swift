@@ -122,7 +122,7 @@ extension OAuthService {
         }
     }
 
-    private func updateToken(_ token: OAuthToken?) {
+    func updateToken(_ token: OAuthToken?) {
         self.oauthToken = token
         print("oauthToken is empty: \(token == nil)")
         do {
@@ -142,15 +142,13 @@ extension OAuthService {
     
     private func getToken() -> OAuthToken? {
         guard
-            let tokenData = UserDefaults.standard.data(
-                forKey: Constants.kTokenStorageKey)
+            let tokenData = UserDefaults.standard.data(forKey: Constants.kTokenStorageKey)
         else {
             return nil
         }
         do {
-            let token = try JSONDecoder().decode(
-                OAuthToken.self, from: tokenData)
-            // 判断过期
+            let token = try JSONDecoder().decode(OAuthToken.self, from: tokenData)
+            // TODO: 判断过期
             return token
         } catch {
             print("UserDefaults get token error: \(error)")

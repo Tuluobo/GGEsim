@@ -8,6 +8,11 @@
 import APIKit
 import Foundation
 
+enum GGNetworkError: Error {
+    case unacceptableStatusCode(Int, String)
+    case unexpectedObject(Any)
+}
+
 class OriginDataParser: DataParser {
     var contentType: String? {
         nil
@@ -43,6 +48,31 @@ extension Request {
     var dataParser: DataParser {
         OriginDataParser()
     }
+
+    func intercept(object: Any, urlResponse: HTTPURLResponse) throws -> Any {
+        guard let data = object as? Data else {
+            print("object is not `Data` type: \(object.self), object: \(object)")
+            throw GGNetworkError.unexpectedObject(object)
+        }
+        let json = try JSONSerialization.jsonObject(with: data)
+        print("json: \(json)")
+
+        let error = (json as? [String: Any])?["error_description"] as? String
+        if 400..<500 ~= urlResponse.statusCode {
+            OAuthService.shared.updateToken(nil)
+            throw GGNetworkError.unacceptableStatusCode(
+                urlResponse.statusCode, error ?? "unauthorized request"
+            )
+        }
+        guard 200..<300 ~= urlResponse.statusCode else {
+            throw GGNetworkError.unacceptableStatusCode(
+                urlResponse.statusCode,
+                error ?? "the status code is not acceptable"
+            )
+        }
+
+        return object
+    }
 }
 
 extension Request where Response: Decodable {
@@ -50,8 +80,6 @@ extension Request where Response: Decodable {
         guard let data = object as? Data else {
             throw GiffgaffError(message: "object is not data type: \(object)")
         }
-        let json = try JSONSerialization.jsonObject(with: data)
-        print("json: \(json)")
         return try JSONDecoder().decode(Response.self, from: data)
     }
 }

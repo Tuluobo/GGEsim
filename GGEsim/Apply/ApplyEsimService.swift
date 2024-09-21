@@ -112,9 +112,6 @@ class ApplyEsimService: ObservableObject {
         DispatchQueue.main.async {
             self.loadingMessage = "Reserved SIM succeed."
         }
-        
-        try await Task.sleep(nanoseconds: 5_000_000_000)
-        
 
         // Step 2: Swap SIM
         let swapSimQuery = """
@@ -144,8 +141,6 @@ class ApplyEsimService: ObservableObject {
         DispatchQueue.main.async {
             self.loadingMessage = "Swap SIM succeed."
         }
-        
-        try await Task.sleep(nanoseconds: 5_000_000_000)
 
         // Step 3: Get eSIMs
         let getESimStatusQuery = """
@@ -161,8 +156,6 @@ class ApplyEsimService: ObservableObject {
         DispatchQueue.main.async {
             self.loadingMessage = "Get eSIM succeed."
         }
-        
-        try await Task.sleep(nanoseconds: 5_000_000_000)
         
         // Step 4: Get eSIM download token
         let eSimDownloadTokenQuery = """
@@ -215,7 +208,11 @@ struct SwapSimData: Codable {
 }
 
 struct GetESimsData: Codable {
-    let ssn: String
+    struct ESim: Codable {
+        let ssn: String
+    }
+    
+    let eSims: [ESim]
 }
 
 struct ESimDownloadTokenData: Codable {
