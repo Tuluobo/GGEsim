@@ -23,6 +23,7 @@ struct LoginView: View {
                     .padding(4)
                 Text("We’re up to good")
                     .font(.title2)
+                    .foregroundColor(.secondary)
             }
             .padding(.top, 200)
             .padding(.bottom, 100)
@@ -47,9 +48,6 @@ struct LoginView: View {
         .onOpenURL { url in
             showOAuthView = false
             oauthService.handleCallback(url: url)
-        }
-        .onChange(of: oauthService.oauthToken) { [oauthService] _ in
-            oauthService.getMember()
         }
     }
 }

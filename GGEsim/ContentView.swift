@@ -29,6 +29,9 @@ struct ContentView: View {
                 }
             }
         }
+        .onChange(of: oauthService.oauthToken) { [oauthService] _ in
+            oauthService.getMember()
+        }
         .onAppear {
             oauthService.getMember()
         }

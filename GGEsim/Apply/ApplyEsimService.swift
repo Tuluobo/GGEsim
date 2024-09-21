@@ -29,7 +29,7 @@ class ApplyEsimService: ObservableObject {
                 switch result {
                 case .success(let response):
                     self.emailCodeRef = response.ref
-                    self.loadingMessage = "Send email code succeed."
+                    self.loadingMessage = ""
                 case .failure(let error):
                     self.loadingMessage = "Failed to send email verification: \(error.localizedDescription)"
                 }
@@ -49,7 +49,7 @@ class ApplyEsimService: ObservableObject {
                 switch result {
                 case .success(let response):
                     self.emailSignature = response.signature
-                    self.loadingMessage = "Verify email code succeed."
+                    self.loadingMessage = ""
                 case .failure(let error):
                     self.loadingMessage = "Failed to verify email code: \(error.localizedDescription)"
                 }
@@ -66,6 +66,7 @@ class ApplyEsimService: ObservableObject {
                 )
             } catch {
                 DispatchQueue.main.async {
+                    self.isLoading = false
                     self.loadingMessage = "Failed to apply esim: \(error.localizedDescription)"
                 }
             }
@@ -112,7 +113,7 @@ class ApplyEsimService: ObservableObject {
             self.loadingMessage = "Reserved SIM succeed."
         }
         
-        try await Task.sleep(nanoseconds: 2_000_000_000)
+        try await Task.sleep(nanoseconds: 5_000_000_000)
         
 
         // Step 2: Swap SIM
@@ -144,7 +145,7 @@ class ApplyEsimService: ObservableObject {
             self.loadingMessage = "Swap SIM succeed."
         }
         
-        try await Task.sleep(nanoseconds: 2_000_000_000)
+        try await Task.sleep(nanoseconds: 5_000_000_000)
 
         // Step 3: Get eSIMs
         let getESimStatusQuery = """
@@ -161,7 +162,7 @@ class ApplyEsimService: ObservableObject {
             self.loadingMessage = "Get eSIM succeed."
         }
         
-        try await Task.sleep(nanoseconds: 2_000_000_000)
+        try await Task.sleep(nanoseconds: 5_000_000_000)
         
         // Step 4: Get eSIM download token
         let eSimDownloadTokenQuery = """

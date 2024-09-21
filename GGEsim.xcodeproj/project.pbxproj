@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D225CD9B2C9E9C190018566B /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D225CD9A2C9E9C190018566B /* Contants.swift */; };
 		D270D7062C9B17A600C0F1A3 /* ApplyEsimService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */; };
 		D270D7082C9B17F400C0F1A3 /* EmailVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */; };
 		D270D70A2C9B1EF600C0F1A3 /* QRcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7092C9B1EF600C0F1A3 /* QRcode.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D225CD9A2C9E9C190018566B /* Contants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
 		D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyEsimService.swift; sourceTree = "<group>"; };
 		D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationView.swift; sourceTree = "<group>"; };
 		D270D7092C9B1EF600C0F1A3 /* QRcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRcode.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			children = (
 				D2DC77CE2C9AB83700704ADB /* PKCE.swift */,
 				D270D7092C9B1EF600C0F1A3 /* QRcode.swift */,
+				D225CD9A2C9E9C190018566B /* Contants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 				D270D70E2C9D096200C0F1A3 /* ApplyView.swift in Sources */,
 				D2DC77C52C9AA70400704ADB /* Base.swift in Sources */,
 				D2DC77B32C9A99F300704ADB /* ContentView.swift in Sources */,
+				D225CD9B2C9E9C190018566B /* Contants.swift in Sources */,
 				D270D7082C9B17F400C0F1A3 /* EmailVerificationView.swift in Sources */,
 				D270D7062C9B17A600C0F1A3 /* ApplyEsimService.swift in Sources */,
 				D2DC77B12C9A99F300704ADB /* Boot.swift in Sources */,

@@ -10,12 +10,6 @@ import CommonCrypto
 import Foundation
 import SwiftUI
 
-enum Constants {
-    static let kTokenStorageKey = "kTokenStorageKey"
-    static let kClientIdKey = "kClientIdKey"
-    static let kClientSecretKey = "kClientSecretKey"
-}
-
 class OAuthService: ObservableObject {
 
     @Published var isLogin: Bool = false
