@@ -12,6 +12,7 @@ struct ApplyView: View {
     @StateObject private var applyEsimService = ApplyEsimService()
 
     @State private var showEmailVerification = false
+    @State private var showAboutView = false
 
     var body: some View {
         VStack {
@@ -46,8 +47,9 @@ struct ApplyView: View {
                 }
                 .disabled(applyEsimService.isLoading || applyEsimService.esim != nil)
                 .shadow(color: .gray.opacity(0.3), radius: 5, x: 0, y: 2)
-                .padding(.bottom, 32)
+                .padding()
             } else {
+                Spacer()
                 Button {
                     oauthService.getMember()
                 } label: {
@@ -58,7 +60,22 @@ struct ApplyView: View {
                         .background(Color.accentColor)
                         .cornerRadius(8)
                 }
+                Spacer()
             }
+            
+            Button {
+                showAboutView = true
+            } label: {
+                Label {
+                    Text("About GGEsim")
+                        .padding(.horizontal, -4)
+                } icon: {
+                    Image(systemName: "exclamationmark.circle")
+                }
+                .foregroundColor(.primary)
+                .font(.footnote)
+            }
+            .padding(.bottom, 8)
         }
         .onChange(of: applyEsimService.emailSignature) { [applyEsimService] newValue in
             if let newValue {
@@ -71,6 +88,11 @@ struct ApplyView: View {
         }
         .sheet(isPresented: $showEmailVerification) {
             EmailVerificationView(service: applyEsimService)
+        }
+        .fullScreenCover(isPresented: $showAboutView) {
+            AboutView() {
+                showAboutView = false
+            }
         }
     }
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D225CD9B2C9E9C190018566B /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D225CD9A2C9E9C190018566B /* Contants.swift */; };
+		D23188AE2CA02CCF00497049 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23188AD2CA02CCF00497049 /* AboutView.swift */; };
 		D270D7062C9B17A600C0F1A3 /* ApplyEsimService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */; };
 		D270D7082C9B17F400C0F1A3 /* EmailVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */; };
 		D270D70A2C9B1EF600C0F1A3 /* QRcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7092C9B1EF600C0F1A3 /* QRcode.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		D225CD9A2C9E9C190018566B /* Contants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
+		D23188AD2CA02CCF00497049 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyEsimService.swift; sourceTree = "<group>"; };
 		D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationView.swift; sourceTree = "<group>"; };
 		D270D7092C9B1EF600C0F1A3 /* QRcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRcode.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				D2DC77B02C9A99F300704ADB /* Boot.swift */,
 				D2DC77B22C9A99F300704ADB /* ContentView.swift */,
+				D23188AD2CA02CCF00497049 /* AboutView.swift */,
 				D270D7102C9D9AB900C0F1A3 /* Apply */,
 				D270D70F2C9D9A7900C0F1A3 /* Login */,
 				D2DC77CB2C9AABF700704ADB /* Representable */,
@@ -237,6 +240,7 @@
 				D2DC77C52C9AA70400704ADB /* Base.swift in Sources */,
 				D2DC77B32C9A99F300704ADB /* ContentView.swift in Sources */,
 				D225CD9B2C9E9C190018566B /* Contants.swift in Sources */,
+				D23188AE2CA02CCF00497049 /* AboutView.swift in Sources */,
 				D270D7082C9B17F400C0F1A3 /* EmailVerificationView.swift in Sources */,
 				D270D7062C9B17A600C0F1A3 /* ApplyEsimService.swift in Sources */,
 				D2DC77B12C9A99F300704ADB /* Boot.swift in Sources */,

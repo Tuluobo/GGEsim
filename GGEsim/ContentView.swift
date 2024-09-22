@@ -33,7 +33,9 @@ struct ContentView: View {
             oauthService.getMember()
         }
         .onAppear {
-            oauthService.getMember()
+            if oauthService.memberInfo == nil {
+                oauthService.getMember()
+            }
         }
     }
 }

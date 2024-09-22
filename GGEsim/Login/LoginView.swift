@@ -10,7 +10,8 @@ import SwiftUI
 struct LoginView: View {
 
     @EnvironmentObject private var oauthService: OAuthService
-    @State var showOAuthView = false
+    @State private var showOAuthView = false
+    @State private var showAboutView = false
     
     var body: some View {
         VStack {
@@ -41,9 +42,30 @@ struct LoginView: View {
             }
             .disabled(showOAuthView)
             .shadow(color: .gray.opacity(0.3), radius: 5, x: 0, y: 2)
+            
+            Spacer()
+            
+            Button {
+                showAboutView = true
+            } label: {
+                Label {
+                    Text("About GGEsim")
+                        .padding(.horizontal, -4)
+                } icon: {
+                    Image(systemName: "exclamationmark.circle")
+                }
+                .foregroundColor(.primary)
+                .font(.footnote)
+            }
+            .padding(8)
         }
         .sheet(isPresented: $showOAuthView) {
             SafariView(url: oauthService.startOAuthFlow())
+        }
+        .fullScreenCover(isPresented: $showAboutView) {
+            AboutView() {
+                showAboutView = false
+            }
         }
         .onOpenURL { url in
             showOAuthView = false
