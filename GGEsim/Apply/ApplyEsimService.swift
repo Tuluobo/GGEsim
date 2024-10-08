@@ -56,6 +56,21 @@ class ApplyEsimService: ObservableObject {
             }
         }
     }
+    
+    func verifyTime() -> Bool {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Europe/London")!
+        let components = calendar.dateComponents([.hour, .minute], from: Date())
+        guard let hour = components.hour, let minute = components.minute else {
+            return false
+        }
+        
+        let currentMinutes = hour * 60 + minute
+        let startMinutes = 4 * 60 + 30  // 4:30 AM
+        let endMinutes = 21 * 60 + 30   // 9:30 PM
+        
+        return currentMinutes >= startMinutes && currentMinutes <= endMinutes
+    }
 
     func apply(emailSignature: String, memberProfile: MemberProfile) {
         Task {

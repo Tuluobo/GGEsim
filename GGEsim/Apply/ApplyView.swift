@@ -12,6 +12,7 @@ struct ApplyView: View {
     @StateObject private var applyEsimService = ApplyEsimService()
 
     @State private var showEmailVerification = false
+    @State private var showAlertView = false
     @State private var showAboutView = false
 
     var body: some View {
@@ -27,26 +28,34 @@ struct ApplyView: View {
                 Spacer()
 
                 // 申请
-                Button {
-                    if let emailSignature = applyEsimService.emailSignature {
-                        applyEsimService.apply(
-                            emailSignature: emailSignature,
-                            memberProfile: memberInfo.memberProfile
-                        )
-                    } else {
-                        showEmailVerification = true
+                VStack {
+                    Button {
+                        if !applyEsimService.verifyTime() {
+                            showAlertView = true
+                        } else if let emailSignature = applyEsimService.emailSignature {
+                            applyEsimService.apply(
+                                emailSignature: emailSignature,
+                                memberProfile: memberInfo.memberProfile
+                            )
+                        } else {
+                            showEmailVerification = true
+                        }
+                    } label: {
+                        Text("Apply eSIM")
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                            .frame(minWidth: 200)
+                            .padding()
+                            .background(Color.accentColor)
+                            .cornerRadius(8)
                     }
-                } label: {
-                    Text("Apply eSIM")
-                        .fontWeight(.bold)
-                        .foregroundColor(.black)
-                        .frame(minWidth: 200)
-                        .padding()
-                        .background(Color.accentColor)
-                        .cornerRadius(8)
+                    .disabled(applyEsimService.isLoading || applyEsimService.esim != nil)
+                    .shadow(color: .gray.opacity(0.3), radius: 5, x: 0, y: 2)
+                    
+                    Text("Between 4:30am and 9:30pm(GMT+1).")
+                        .font(.footnote)
+                        .opacity(0.7)
                 }
-                .disabled(applyEsimService.isLoading || applyEsimService.esim != nil)
-                .shadow(color: .gray.opacity(0.3), radius: 5, x: 0, y: 2)
                 .padding()
             } else {
                 Spacer()
@@ -86,6 +95,13 @@ struct ApplyView: View {
                 )
             }
         }
+         .alert(isPresented: $showAlertView) {
+             Alert(
+                 title: Text("Application Time Restriction"),
+                 message: Text("eSIM applications are only accepted between 4:30am and 9:30pm (GMT+1). Please try again during these hours."),
+                 dismissButton: .default(Text("OK"))
+             )
+         }
         .sheet(isPresented: $showEmailVerification) {
             EmailVerificationView(service: applyEsimService)
         }
