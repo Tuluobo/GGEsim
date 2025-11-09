@@ -11,7 +11,7 @@ struct ApplyView: View {
     @EnvironmentObject private var oauthService: OAuthService
     @StateObject private var applyEsimService = ApplyEsimService()
 
-    @State private var showEmailVerification = false
+    @State private var showVerification = false
     @State private var showAlertView = false
     @State private var showAboutView = false
 
@@ -32,13 +32,15 @@ struct ApplyView: View {
                     Button {
                         if !applyEsimService.verifyTime() {
                             showAlertView = true
-                        } else if let emailSignature = applyEsimService.emailSignature {
+                        } else if let mfaSignature = applyEsimService.mfaSignature,
+                                  let mfaRef = applyEsimService.mfaRef {
                             applyEsimService.apply(
-                                emailSignature: emailSignature,
+                                mfaSignature: mfaSignature,
+                                mfaRef: mfaRef,
                                 memberProfile: memberInfo.memberProfile
                             )
                         } else {
-                            showEmailVerification = true
+                            showVerification = true
                         }
                     } label: {
                         Text("Apply eSIM")
@@ -86,11 +88,12 @@ struct ApplyView: View {
             }
             .padding(.bottom, 8)
         }
-        .onChange(of: applyEsimService.emailSignature) { [applyEsimService] newValue in
-            if let newValue {
-                showEmailVerification = false
+        .onChange(of: applyEsimService.mfaSignature) { [applyEsimService] newValue in
+            if let newValue, let mfaRef = applyEsimService.mfaRef {
+                showVerification = false
                 applyEsimService.apply(
-                    emailSignature: newValue,
+                    mfaSignature: newValue,
+                    mfaRef: mfaRef,
                     memberProfile: oauthService.memberInfo!.memberProfile
                 )
             }
@@ -102,8 +105,8 @@ struct ApplyView: View {
                  dismissButton: .default(Text("OK"))
              )
          }
-        .sheet(isPresented: $showEmailVerification) {
-            EmailVerificationView(service: applyEsimService)
+        .sheet(isPresented: $showVerification) {
+            VerificationView(service: applyEsimService)
         }
         .fullScreenCover(isPresented: $showAboutView) {
             AboutView() {

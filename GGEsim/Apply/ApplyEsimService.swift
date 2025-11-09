@@ -13,45 +13,57 @@ class ApplyEsimService: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var loadingMessage: String = ""
     
-    @Published var emailCodeRef: String?
-    @Published var emailSignature: String?
+    @Published var mfaRef: String?
+    @Published var mfaSignature: String?
 
     @Published var esim: String?
 
-    func sendEmailVerification() {
+    func sendVerificationCode() {
         isLoading = true
-        loadingMessage = "Sending email code ..."
+        loadingMessage = "Sending code ..."
 
-        let request = SendEmailCodeRequest()
+        let getESimStatusQuery = """
+        mutation simSwapMfaChallenge {
+          simSwapMfaChallenge {
+            ref
+            methods {
+              value
+              channel
+              __typename
+            }
+            __typename
+          }
+        }
+        """
+        let request = GraphQLRequest<Response<MfaChallengeResponseData>>(query: getESimStatusQuery, variables: ["deliveryStatus": "DOWNLOADABLE"])
         Session.send(request) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
                 switch result {
                 case .success(let response):
-                    self.emailCodeRef = response.ref
+                    self.mfaRef = response.data.simSwapMfaChallenge.ref
                     self.loadingMessage = ""
                 case .failure(let error):
-                    self.loadingMessage = "Failed to send email verification: \(error.localizedDescription)"
+                    self.loadingMessage = "Failed to send verification code: \(error.localizedDescription)"
                 }
             }
         }
     }
 
-    func verifyEmailCode(verificationCode: String) {
+    func verifyCode(verificationCode: String) {
         isLoading = true
-        loadingMessage = "Verifying email code ..."
+        loadingMessage = "Verifying code ..."
 
-        let request = VerifyEmailCodeRequest(
-            ref: emailCodeRef ?? "", code: verificationCode)
+        let request = VerifyCodeRequest(ref: mfaRef ?? "", code: verificationCode)
         Session.send(request) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
                 switch result {
                 case .success(let response):
-                    self.emailSignature = response.signature
+                    self.mfaSignature = response.signature
                     self.loadingMessage = ""
                 case .failure(let error):
-                    self.loadingMessage = "Failed to verify email code: \(error.localizedDescription)"
+                    self.loadingMessage = "Failed to verify code: \(error.localizedDescription)"
                 }
             }
         }
@@ -72,11 +84,12 @@ class ApplyEsimService: ObservableObject {
         return currentMinutes >= startMinutes && currentMinutes <= endMinutes
     }
 
-    func apply(emailSignature: String, memberProfile: MemberProfile) {
+    func apply(mfaSignature: String, mfaRef: String, memberProfile: MemberProfile) {
         Task {
             do {
                 try await self.applyInner(
-                    emailSignature: emailSignature,
+                    mfaSignature: mfaSignature,
+                    mfaRef: mfaRef,
                     memberProfile: memberProfile
                 )
             } catch {
@@ -88,7 +101,7 @@ class ApplyEsimService: ObservableObject {
         }
     }
 
-    func applyInner(emailSignature: String, memberProfile: MemberProfile) async throws {
+    func applyInner(mfaSignature: String, mfaRef: String, memberProfile: MemberProfile) async throws {
         DispatchQueue.main.async {
             self.isLoading = true
             self.loadingMessage = "Started apply esim ..."
@@ -130,8 +143,8 @@ class ApplyEsimService: ObservableObject {
 
         // Step 2: Swap SIM
         let swapSimQuery = """
-            mutation SwapSim($activationCode: String!, $mfaSignature: String!) {
-              swapSim(activationCode: $activationCode, mfaSignature: $mfaSignature) {
+            mutation SwapSim($activationCode: String!, $mfaSignature: String!, $mfaRef: String) {
+              swapSim(activationCode: $activationCode, mfaSignature: $mfaSignature, mfaRef: $mfaRef) {
                 old {
                   ssn
                   activationCode
@@ -149,7 +162,8 @@ class ApplyEsimService: ObservableObject {
 
         let swapSimVariables: [String: Any] = [
             "activationCode": esim.activationCode,
-            "mfaSignature": emailSignature,
+            "mfaSignature": mfaSignature,
+            "mfaRef": mfaRef
         ]
         let swapSimRequest = GraphQLRequest<Response<SwapSimData>>(query: swapSimQuery, variables: swapSimVariables)
         let swapSimResponse = try await Session.response(for: swapSimRequest)
@@ -195,6 +209,13 @@ class ApplyEsimService: ObservableObject {
             self.esim = eSimDownloadTokenResponse.data.eSimDownloadToken.lpaString
         }
     }
+}
+
+struct MfaChallengeResponseData: Codable {
+    struct SimSwapMfaChallenge: Codable {
+        let ref: String
+    }
+    let simSwapMfaChallenge: SimSwapMfaChallenge
 }
 
 struct ESim: Codable {

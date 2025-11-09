@@ -10,7 +10,7 @@
 		D225CD9B2C9E9C190018566B /* Contants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D225CD9A2C9E9C190018566B /* Contants.swift */; };
 		D23188AE2CA02CCF00497049 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23188AD2CA02CCF00497049 /* AboutView.swift */; };
 		D270D7062C9B17A600C0F1A3 /* ApplyEsimService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */; };
-		D270D7082C9B17F400C0F1A3 /* EmailVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */; };
+		D270D7082C9B17F400C0F1A3 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7072C9B17F400C0F1A3 /* VerificationView.swift */; };
 		D270D70A2C9B1EF600C0F1A3 /* QRcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D7092C9B1EF600C0F1A3 /* QRcode.swift */; };
 		D270D70C2C9D095C00C0F1A3 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D70B2C9D095C00C0F1A3 /* LoginView.swift */; };
 		D270D70E2C9D096200C0F1A3 /* ApplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D270D70D2C9D096200C0F1A3 /* ApplyView.swift */; };
@@ -31,7 +31,7 @@
 		D225CD9A2C9E9C190018566B /* Contants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contants.swift; sourceTree = "<group>"; };
 		D23188AD2CA02CCF00497049 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyEsimService.swift; sourceTree = "<group>"; };
-		D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationView.swift; sourceTree = "<group>"; };
+		D270D7072C9B17F400C0F1A3 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		D270D7092C9B1EF600C0F1A3 /* QRcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRcode.swift; sourceTree = "<group>"; };
 		D270D70B2C9D095C00C0F1A3 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D270D70D2C9D096200C0F1A3 /* ApplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyView.swift; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 			children = (
 				D270D70D2C9D096200C0F1A3 /* ApplyView.swift */,
 				D270D7052C9B17A600C0F1A3 /* ApplyEsimService.swift */,
-				D270D7072C9B17F400C0F1A3 /* EmailVerificationView.swift */,
+				D270D7072C9B17F400C0F1A3 /* VerificationView.swift */,
 			);
 			path = Apply;
 			sourceTree = "<group>";
@@ -241,7 +241,7 @@
 				D2DC77B32C9A99F300704ADB /* ContentView.swift in Sources */,
 				D225CD9B2C9E9C190018566B /* Contants.swift in Sources */,
 				D23188AE2CA02CCF00497049 /* AboutView.swift in Sources */,
-				D270D7082C9B17F400C0F1A3 /* EmailVerificationView.swift in Sources */,
+				D270D7082C9B17F400C0F1A3 /* VerificationView.swift in Sources */,
 				D270D7062C9B17A600C0F1A3 /* ApplyEsimService.swift in Sources */,
 				D2DC77B12C9A99F300704ADB /* Boot.swift in Sources */,
 				D270D70A2C9B1EF600C0F1A3 /* QRcode.swift in Sources */,
@@ -378,7 +378,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = GGEsim/GGEsim.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"GGEsim/Preview Content\"";
 				DEVELOPMENT_TEAM = DD474WPLV8;
 				ENABLE_PREVIEWS = YES;
@@ -398,7 +398,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tuluobo.GGEsim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -416,7 +416,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = GGEsim/GGEsim.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"GGEsim/Preview Content\"";
 				DEVELOPMENT_TEAM = DD474WPLV8;
 				ENABLE_PREVIEWS = YES;
@@ -436,7 +436,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tuluobo.GGEsim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

@@ -57,33 +57,13 @@ struct AccessTokenRequest: Request {
     }
 }
 
-struct SendEmailCodeRequest: Request {
+struct VerifyCodeRequest: Request {
 
-    struct SendEmailCodeResponse: Codable {
-        let ref: String
-    }
-
-    typealias Response = SendEmailCodeResponse
-
-    let baseURL = URL(string: "https://id.giffgaff.com")!
-    let method: HTTPMethod = .post
-    let path = "/v4/mfa/challenge/me"
-
-    var bodyParameters: (any BodyParameters)? {
-        JSONBodyParameters(JSONObject: [
-            "source": "esim",
-            "preferredChannels": ["EMAIL"],
-        ])
-    }
-}
-
-struct VerifyEmailCodeRequest: Request {
-
-    struct VerifyEmailCodeResponse: Codable {
+    struct VerifyCodeResponse: Codable {
         let signature: String
     }
 
-    typealias Response = VerifyEmailCodeResponse
+    typealias Response = VerifyCodeResponse
 
     let ref: String
     let code: String

@@ -28,11 +28,12 @@ extension Request {
         // Headers
         var headers = [
             "x-gg-app-os": "iOS",
-            "x-gg-app-os-version": "14",
+            "x-gg-app-os-version": "26.1",
             "x-gg-app-build-number": "722",
-            "x-gg-app-device-manufacturer": "apple",
-            "x-gg-app-device-model": "iphone15",
-            "x-gg-app-version": "13.21.2",
+            "x-gg-app-device-manufacturer": "Apple",
+            "x-gg-app-version": "17.54.1",
+            "x-gg-app-device-model": "iPhone",
+            "x-gg-app-device-id": "iPhone17,1"
         ]
         // Get cookies from shared HTTPCookieStorage
         if let cookies = HTTPCookieStorage.shared.cookies(for: self.baseURL) {
@@ -55,6 +56,7 @@ extension Request {
             throw GGNetworkError.unexpectedObject(object)
         }
         let json = try JSONSerialization.jsonObject(with: data)
+        print("request: \(self.bodyParameters)")
         print("json: \(json)")
 
         let error = (json as? [String: Any])?["error_description"] as? String

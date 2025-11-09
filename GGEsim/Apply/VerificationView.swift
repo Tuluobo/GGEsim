@@ -1,5 +1,5 @@
 //
-//  EmailVerificationView.swift
+//  VerificationView.swift
 //  GGEsim
 //
 //  Created by Tuluobo on 2024/9/17.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EmailVerificationView: View {
+struct VerificationView: View {
     @ObservedObject var service: ApplyEsimService
     @State private var verificationCode: String = ""
     @State private var countdown: Int = 60
@@ -16,10 +16,10 @@ struct EmailVerificationView: View {
     var body: some View {
         VStack(spacing: 20) {
             VStack {
-                Text("Email Verification")
+                Text("Verification")
                     .font(.title)
                     .fontWeight(.bold)
-                Text("Enter the verification code sent to your email")
+                Text("Enter the verification code sent to your phone number")
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                 
@@ -46,10 +46,10 @@ struct EmailVerificationView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.accentColor, lineWidth: 1)
                     )
-                    .disabled(service.isLoading || service.emailCodeRef == nil)
+                    .disabled(service.isLoading || service.mfaRef == nil)
 
                 Button(action: {
-                    service.sendEmailVerification()
+                    service.sendVerificationCode()
                     startCountdown()
                 }) {
                     Text(isCountingDown ? "\(countdown)s" : "发送")
@@ -66,7 +66,7 @@ struct EmailVerificationView: View {
             .padding(.horizontal)
 
             Button(action: {
-                service.verifyEmailCode(verificationCode: verificationCode)
+                service.verifyCode(verificationCode: verificationCode)
             }) {
                 Text("Submit")
                     .fontWeight(.bold)
@@ -77,7 +77,7 @@ struct EmailVerificationView: View {
                     .cornerRadius(8)
             }
             .disabled(
-                service.isLoading || service.emailCodeRef == nil || verificationCode.count != 6
+                service.isLoading || service.mfaRef == nil || verificationCode.count != 6
             )
         }
         .padding()
@@ -98,5 +98,5 @@ struct EmailVerificationView: View {
 }
 
 #Preview {
-    EmailVerificationView(service: ApplyEsimService())
+    VerificationView(service: ApplyEsimService())
 }
