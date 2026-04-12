@@ -46,7 +46,16 @@ class OAuthService: ObservableObject {
         ]
 
         UserDefaults.standard.set(codeVerifier, forKey: "codeVerifier")
-        return components.url!
+        
+        // 基于抓包，构造跳转到主站的入口连接，让其再重定向回来
+        let authorizeString = components.url!.absoluteString
+        var entryComponents = URLComponents(string: "https://www.giffgaff.com/auth/login")!
+        entryComponents.queryItems = [
+            URLQueryItem(name: "device", value: "app"),
+            URLQueryItem(name: "redirect", value: authorizeString)
+        ]
+        
+        return entryComponents.url!
     }
 
     func handleCallback(url: URL) {
