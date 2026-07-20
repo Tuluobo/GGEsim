@@ -19,7 +19,7 @@ struct Response<T: Decodable>: Decodable {
 
 struct MemberInfo: Codable {
     let memberProfile: MemberProfile
-    let sim: SimInfo
+    let sim: SimInfo?
 }
 
 struct MemberProfile: Codable {

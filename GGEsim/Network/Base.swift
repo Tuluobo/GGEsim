@@ -60,12 +60,9 @@ extension Request {
         print("json: \(json)")
 
         let error = (json as? [String: Any])?["error_description"] as? String
-        if 400..<500 ~= urlResponse.statusCode {
-            OAuthService.shared.updateToken(nil)
-            throw GGNetworkError.unacceptableStatusCode(
-                urlResponse.statusCode, error ?? "unauthorized request"
-            )
-        }
+        // 注意：这里不再因为任意 4xx 就清空登录态。是否是「token 失效需要登出」，
+        // 交给上层（OAuthService）判断——它会先尝试用 refresh token 刷新并重试，
+        // 刷新失败才登出。直接在这里清 token 会把 refresh token 一起丢掉，无法刷新。
         guard 200..<300 ~= urlResponse.statusCode else {
             throw GGNetworkError.unacceptableStatusCode(
                 urlResponse.statusCode,
@@ -82,6 +79,32 @@ extension Request where Response: Decodable {
         guard let data = object as? Data else {
             throw GiffgaffError(message: "object is not data type: \(object)")
         }
-        return try JSONDecoder().decode(Response.self, from: data)
+        do {
+            return try JSONDecoder().decode(Response.self, from: data)
+        } catch {
+            let body = String(data: data, encoding: .utf8) ?? "<non-utf8 \(data.count) bytes>"
+            print("[decode 失败] \(Response.self) status=\(urlResponse.statusCode) error=\(error)\nbody=\(body)")
+            throw error
+        }
+    }
+}
+
+extension Error {
+    /// 剥掉 APIKit 的 SessionTaskError 外壳，取出底层真正的错误。
+    /// SessionTaskError 有三种：connectionError(0)/requestError(1)/responseError(2)。
+    var ggUnderlying: Error {
+        guard let e = self as? SessionTaskError else { return self }
+        switch e {
+        case .connectionError(let err), .requestError(let err), .responseError(let err):
+            return err
+        }
+    }
+
+    /// 若底层是我们抛出的非 2xx HTTP 错误，返回其状态码。
+    var ggHTTPStatusCode: Int? {
+        if case let GGNetworkError.unacceptableStatusCode(code, _) = ggUnderlying {
+            return code
+        }
+        return nil
     }
 }
