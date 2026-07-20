@@ -1,6 +1,51 @@
 {
-  "originHash" : "05f290826ed14caf99e33cc2873b0667f0aa31efea9bd8bf0c7013dcb666216f",
+  "originHash" : "7c4b0898cffda56d24f58b331706ff41dfd458a7c663ff62ce131a515c63d1d9",
   "pins" : [
+    {
+      "identity" : "adyen-3ds2-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Adyen/adyen-3ds2-ios",
+      "state" : {
+        "revision" : "00862adbc079d0be943666a4ad2523deb31f9546",
+        "version" : "2.4.4"
+      }
+    },
+    {
+      "identity" : "adyen-authentication-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Adyen/adyen-authentication-ios",
+      "state" : {
+        "revision" : "e23e06009c3494834396fbddae1fc79451f57de3",
+        "version" : "3.2.0"
+      }
+    },
+    {
+      "identity" : "adyen-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Adyen/adyen-ios",
+      "state" : {
+        "revision" : "5f6779b31299e3067de3a5279a816f3b8d2fbdf3",
+        "version" : "5.25.1"
+      }
+    },
+    {
+      "identity" : "adyen-networking-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Adyen/adyen-networking-ios",
+      "state" : {
+        "revision" : "43fd5d93f8587623eb134e3968f099e0417e74f6",
+        "version" : "3.0.1"
+      }
+    },
+    {
+      "identity" : "adyen-wechatpay-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Adyen/adyen-wechatpay-ios",
+      "state" : {
+        "revision" : "1127f793854d8624dbe6741d5c42be39dadd4f93",
+        "version" : "2.2.0"
+      }
+    },
     {
       "identity" : "apikit",
       "kind" : "remoteSourceControl",
@@ -8,6 +53,24 @@
       "state" : {
         "revision" : "b839e53b870104798035b279d2a6168b0a2227b1",
         "version" : "5.4.0"
+      }
+    },
+    {
+      "identity" : "cash-app-pay-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cashapp/cash-app-pay-ios-sdk",
+      "state" : {
+        "revision" : "25f526aec9b2535d0dc4485280bbf6c7d39e3424",
+        "version" : "0.6.2"
+      }
+    },
+    {
+      "identity" : "swiftgenplugin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftGen/SwiftGenPlugin.git",
+      "state" : {
+        "revision" : "879b85a470cacd70c19e22eb7e11a3aed66f4068",
+        "version" : "6.6.2"
       }
     }
   ],

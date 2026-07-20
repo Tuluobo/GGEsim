@@ -148,6 +148,13 @@ extension OAuthService {
         }
     }
 
+    func signout() {
+        UserDefaults.standard.set(nil, forKey: Constants.kTokenStorageKey)
+        self.isLogin = false
+        self.oauthToken = nil
+        self.memberInfo = nil
+    }
+
     
     private func getToken() -> OAuthToken? {
         guard
