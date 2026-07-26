@@ -33,9 +33,11 @@ struct WebLoginView: UIViewRepresentable {
     /// 支付回跳回调：`success` 来自 giffgaff://payment 的 status=success，`reason` 为失败原因。
     /// 绑卡等纯浏览场景传 nil（不会命中 giffgaff://payment，也就不会触发）。
     var onPaymentReturn: ((_ success: Bool, _ reason: String?) -> Void)? = nil
+    /// 任意 `giffgaff://` scheme 回跳时触发：上层据此关闭 App 内浏览器（并在 onDismiss 里刷新当前页）。
+    var onClose: (() -> Void)? = nil
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(onPaymentReturn: onPaymentReturn)
+        Coordinator(onPaymentReturn: onPaymentReturn, onClose: onClose)
     }
 
     func makeUIView(context: Context) -> WKWebView {
@@ -52,9 +54,11 @@ struct WebLoginView: UIViewRepresentable {
 
     final class Coordinator: NSObject, WKNavigationDelegate {
         private let onPaymentReturn: ((Bool, String?) -> Void)?
+        private let onClose: (() -> Void)?
 
-        init(onPaymentReturn: ((Bool, String?) -> Void)?) {
+        init(onPaymentReturn: ((Bool, String?) -> Void)?, onClose: (() -> Void)?) {
             self.onPaymentReturn = onPaymentReturn
+            self.onClose = onClose
         }
 
         func webView(
@@ -62,8 +66,13 @@ struct WebLoginView: UIViewRepresentable {
             decidePolicyFor navigationAction: WKNavigationAction,
             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
         ) {
+            let url = navigationAction.request.url
+            // 每次跳转都记录所打开的 URL（写入沙盒日志，DEBUG 同时打印终端）。
+            appLog("[WebView] navigate: \(url?.absoluteString ?? "nil")")
+
             // 拦自定义 scheme：giffgaff://payment... 是支付回跳；WKWebView 本身也打不开它。
-            if let url = navigationAction.request.url, url.scheme == "giffgaff" {
+            // 兜底：任意 giffgaff:// 回跳都取消加载、关闭浏览器并让上层刷新当前页。
+            if let url = url, url.scheme == "giffgaff" {
                 decisionHandler(.cancel)
                 if url.absoluteString.hasPrefix("giffgaff://payment") {
                     let comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
@@ -71,6 +80,7 @@ struct WebLoginView: UIViewRepresentable {
                     let reason = comps?.queryItems?.first { $0.name == "reason" }?.value
                     onPaymentReturn?(status == "success", reason)
                 }
+                onClose?()
                 return
             }
             decisionHandler(.allow)
@@ -89,11 +99,17 @@ struct BindCardSheet: View {
 
     var body: some View {
         NavigationView {
-            WebLoginView(url: url) { success, reason in
-                // 支付回跳：先关闭收银台页，再把结果交给上层处理。
-                presentationMode.wrappedValue.dismiss()
-                onPaymentReturn?(success, reason)
-            }
+            WebLoginView(
+                url: url,
+                onPaymentReturn: { success, reason in
+                    // 支付回跳：把结果交给上层处理（关闭动作统一由 onClose 负责）。
+                    onPaymentReturn?(success, reason)
+                },
+                onClose: {
+                    // 任意 giffgaff:// 回跳：关闭本页；刷新当前页由调用方在 .sheet(onDismiss:) 里做。
+                    presentationMode.wrappedValue.dismiss()
+                }
+            )
             .edgesIgnoringSafeArea(.bottom)
             .navigationBarTitle(title, displayMode: .inline)
             .toolbar {

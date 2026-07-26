@@ -25,9 +25,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         networkMonitor?.pathUpdateHandler = { [weak self] path in
             DispatchQueue.main.async {
                 if path.status == .satisfied {
-                    print("网络连接正常")
+                    appLog("网络连接正常")
                 } else {
-                    print("网络连接不可用")
+                    appLog("网络连接不可用")
                     self?.showNetworkAlert()
                 }
             }

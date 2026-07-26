@@ -52,12 +52,12 @@ extension Request {
 
     func intercept(object: Any, urlResponse: HTTPURLResponse) throws -> Any {
         guard let data = object as? Data else {
-            print("object is not `Data` type: \(object.self), object: \(object)")
+            appLog("object is not `Data` type: \(object.self), object: \(object)")
             throw GGNetworkError.unexpectedObject(object)
         }
         let json = try JSONSerialization.jsonObject(with: data)
-        print("request: \(self.bodyParameters)")
-        print("json: \(json)")
+        appLog("request: \(self.bodyParameters)")
+        appLog("json: \(json)")
 
         let error = (json as? [String: Any])?["error_description"] as? String
         // 注意：这里不再因为任意 4xx 就清空登录态。是否是「token 失效需要登出」，
@@ -83,7 +83,7 @@ extension Request where Response: Decodable {
             return try JSONDecoder().decode(Response.self, from: data)
         } catch {
             let body = String(data: data, encoding: .utf8) ?? "<non-utf8 \(data.count) bytes>"
-            print("[decode 失败] \(Response.self) status=\(urlResponse.statusCode) error=\(error)\nbody=\(body)")
+            appLog("[decode 失败] \(Response.self) status=\(urlResponse.statusCode) error=\(error)\nbody=\(body)")
             throw error
         }
     }

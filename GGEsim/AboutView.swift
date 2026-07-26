@@ -13,6 +13,15 @@ struct AboutView: View {
 
     private let infoDictionary = Bundle.main.infoDictionary
 
+    /// 日志导出分享 sheet 的数据源（非空即弹出系统分享面板）。
+    @State private var logShareItem: ShareItem?
+
+    /// 包一层 Identifiable，供 `.sheet(item:)` 使用。
+    private struct ShareItem: Identifiable {
+        let url: URL
+        var id: String { url.absoluteString }
+    }
+
     var body: some View {
         ZStack {
             (colorScheme == .dark ? Color.black : Color(UIColor.systemGray6))
@@ -52,6 +61,25 @@ struct AboutView: View {
                     LinkButton(
                         title: "反馈问题", url: infoDictionary?[Constants.kGuideDocURLKey] as? String ?? "",
                         icon: "envelope")
+
+                    // 导出 App 日志（沙盒 ggesim.log）并通过系统分享面板发送。
+                    Button(action: {
+                        logShareItem = ShareItem(url: AppLogger.shared.exportFileURL())
+                    }) {
+                        HStack {
+                            Image(systemName: "square.and.arrow.up")
+                                .foregroundColor(.blue)
+                            Text("导出日志")
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Image(systemName: "doc.text")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
+                        .background(Color(UIColor.secondarySystemBackground))
+                        .cornerRadius(10)
+                    }
                 }
                 .padding(.top, 20)
                 
@@ -64,7 +92,21 @@ struct AboutView: View {
             }
             .padding()
         }
+        .sheet(item: $logShareItem) { item in
+            ShareSheet(activityItems: [item.url])
+        }
     }
+}
+
+/// 系统分享面板（UIActivityViewController）的 SwiftUI 封装。
+struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) { }
 }
 
 struct LinkButton: View {

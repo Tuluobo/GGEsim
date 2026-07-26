@@ -62,14 +62,14 @@ class OAuthService: ObservableObject {
     }
 
     func handleCallback(url: URL) {
-        print("Callback url: \(url)")
+        appLog("Callback url: \(url)")
         guard
             let code = URLComponents(url: url, resolvingAgainstBaseURL: false)?
                 .queryItems?
                 .first(where: { $0.name == "code" })?
                 .value
         else {
-            print("Error: No code found in callback URL")
+            appLog("Error: No code found in callback URL")
             return
         }
 
@@ -92,9 +92,9 @@ class OAuthService: ObservableObject {
 
         // 1) 提前刷新：本地判断已过期就先换新 token。
         if token.isExpired {
-            print("[getMember] access token 本地已过期，先刷新")
+            appLog("[getMember] access token 本地已过期，先刷新")
             guard await refreshAccessToken(using: token) != nil else {
-                print("[getMember] 提前刷新失败 → 登出")
+                appLog("[getMember] 提前刷新失败 → 登出")
                 signout()
                 return
             }
@@ -103,7 +103,7 @@ class OAuthService: ObservableObject {
         // 2) 拉取用户信息。
         do {
             memberInfo = try await requestMemberInfo()
-            print("[getMember] 成功 member=\(memberInfo?.memberProfile.memberName ?? "-") sim=\(memberInfo?.sim?.phoneNumber ?? "nil")")
+            appLog("[getMember] 成功 member=\(memberInfo?.memberProfile.memberName ?? "-") sim=\(memberInfo?.sim?.phoneNumber ?? "nil")")
             return
         } catch {
             logError("[getMember] 首次请求失败", error)
@@ -112,16 +112,16 @@ class OAuthService: ObservableObject {
         }
 
         // 3) 401：刷新后重试一次。
-        print("[getMember] 收到 401，尝试刷新 token 后重试")
+        appLog("[getMember] 收到 401，尝试刷新 token 后重试")
         guard let current = oauthToken,
               await refreshAccessToken(using: current) != nil else {
-            print("[getMember] 401 后刷新失败 → 登出")
+            appLog("[getMember] 401 后刷新失败 → 登出")
             signout()
             return
         }
         do {
             memberInfo = try await requestMemberInfo()
-            print("[getMember] 刷新后重试成功")
+            appLog("[getMember] 刷新后重试成功")
         } catch {
             logError("[getMember] 刷新后重试仍失败", error)
         }
@@ -131,9 +131,9 @@ class OAuthService: ObservableObject {
     private func logError(_ prefix: String, _ error: Error) {
         let underlying = error.ggUnderlying
         if let code = error.ggHTTPStatusCode {
-            print("\(prefix)：HTTP \(code) - \(underlying.localizedDescription)")
+            appLog("\(prefix)：HTTP \(code) - \(underlying.localizedDescription)")
         } else {
-            print("\(prefix)：\(type(of: underlying)) - \(underlying)")
+            appLog("\(prefix)：\(type(of: underlying)) - \(underlying)")
         }
     }
 
@@ -177,7 +177,7 @@ extension OAuthService {
                 case .success(let response):
                     self.updateToken(response)
                 case .failure(let error):
-                    print("error: \(error.localizedDescription)")
+                    appLog("error: \(error.localizedDescription)")
                 }
             }
         }
@@ -204,7 +204,7 @@ extension OAuthService {
             do {
                 let newToken = try await Self.send(request)
                 self.updateToken(newToken)
-                print("[refresh] 刷新成功，新 token 有效期 \(newToken.expiresIn)s")
+                appLog("[refresh] 刷新成功，新 token 有效期 \(newToken.expiresIn)s")
                 return newToken
             } catch {
                 self.logError("[refresh] 刷新失败", error)
@@ -251,7 +251,7 @@ extension OAuthService {
 
     func updateToken(_ token: OAuthToken?) {
         self.oauthToken = token
-        print("oauthToken is empty: \(token == nil)")
+        appLog("oauthToken is empty: \(token == nil)")
         do {
             if let token {
                 let token = try JSONEncoder().encode(token)
@@ -262,7 +262,7 @@ extension OAuthService {
                     forKey: Constants.kTokenStorageKey)
             }
         } catch {
-            print("UserDefaults save token error: \(error)")
+            appLog("UserDefaults save token error: \(error)")
         }
     }
 
@@ -285,7 +285,7 @@ extension OAuthService {
             // 「本地判过期→先刷新」+「401→刷新重试」的链路保证其有效。
             return try JSONDecoder().decode(OAuthToken.self, from: tokenData)
         } catch {
-            print("UserDefaults get token error: \(error)")
+            appLog("UserDefaults get token error: \(error)")
             return nil
         }
     }

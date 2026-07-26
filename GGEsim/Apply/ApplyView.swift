@@ -274,11 +274,12 @@ struct NoSimView: View {
             }
         }
         // 收银台 URL 由 startWebCheckout 异步产出，产出即弹出收银台 sheet。
-        // 付款结果由 giffgaff://payment 回跳驱动（见下方 onPaymentReturn），
-        // 故 onDismiss 不再兜底取码——用户中途返回则停留在 reserved 可重试。
+        // 付款结果由 giffgaff://payment 回跳驱动（见下方 onPaymentReturn）。
+        // 任意方式关闭（giffgaff:// 回跳 / 用户手动「完成」/ 下滑）都会走 onDismiss，
+        // 统一刷新当前页（重新拉取已绑支付方式与状态）。
         .onChange(of: topUpService.webCheckoutURL) { newURL in
             guard let url = newURL else { return }
-            onWebSheetDismiss = {}
+            onWebSheetDismiss = { topUpService.loadPaymentMethods() }
             webSheet = .checkout(url)
             topUpService.webCheckoutURL = nil
         }
@@ -314,7 +315,7 @@ struct NoSimView: View {
                 webSheet = .bindCard(url)
             } catch {
                 // 换 code 失败兜底：仍打开目标页（未登录态，用户可自行登录），不卡死流程。
-                print("[bindCard] 生成 SSO 链接失败: \(error.ggUnderlying)")
+                appLog("[bindCard] 生成 SSO 链接失败: \(error.ggUnderlying)")
                 if let fallback = URL(string: Constants.paymentDetailsURL) {
                     webSheet = .bindCard(fallback)
                 }

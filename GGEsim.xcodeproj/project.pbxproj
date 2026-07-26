@@ -24,6 +24,7 @@
 		D2DC77C72C9AA96400704ADB /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77C62C9AA96400704ADB /* OAuth.swift */; };
 		D2DC77CA2C9AABD900704ADB /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77C92C9AABD900704ADB /* SafariView.swift */; };
 		E0B1F0ACE7F541258254687A /* WebLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1371354901E145719B6C7D70 /* WebLoginView.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5D /* AppLogger.swift */; };
 		D2DC77CD2C9AAC6600704ADB /* OAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77CC2C9AAC6600704ADB /* OAuthService.swift */; };
 		D2DC77CF2C9AB83700704ADB /* PKCE.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77CE2C9AB83700704ADB /* PKCE.swift */; };
 		D2DC77D22C9AB88900704ADB /* GraphQLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DC77D12C9AB88900704ADB /* GraphQLRequest.swift */; };
@@ -49,6 +50,7 @@
 		D2DC77C82C9AAB7B00704ADB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D2DC77C92C9AABD900704ADB /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		1371354901E145719B6C7D70 /* WebLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebLoginView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5D /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 		D2DC77CC2C9AAC6600704ADB /* OAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthService.swift; sourceTree = "<group>"; };
 		D2DC77CE2C9AB83700704ADB /* PKCE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCE.swift; sourceTree = "<group>"; };
 		D2DC77D12C9AB88900704ADB /* GraphQLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLRequest.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				D2DC77CE2C9AB83700704ADB /* PKCE.swift */,
 				D270D7092C9B1EF600C0F1A3 /* QRcode.swift */,
 				D225CD9A2C9E9C190018566B /* Contants.swift */,
+				A1B2C3D4E5F60718293A4B5D /* AppLogger.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				D2DC77C72C9AA96400704ADB /* OAuth.swift in Sources */,
 				D2DC77CA2C9AABD900704ADB /* SafariView.swift in Sources */,
 				E0B1F0ACE7F541258254687A /* WebLoginView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* AppLogger.swift in Sources */,
 				D2DC77D22C9AB88900704ADB /* GraphQLRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
