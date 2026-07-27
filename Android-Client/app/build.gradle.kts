@@ -28,7 +28,7 @@ val configuredVersionCode = configValue("GGESIM_VERSION_CODE", "11")
     .toIntOrNull()
     ?.takeIf { it in 1..2_100_000_000 }
     ?: error("GGESIM_VERSION_CODE must be an integer between 1 and 2100000000")
-val configuredVersionName = configValue("GGESIM_VERSION_NAME", "0.6.0").ifBlank { "0.6.0" }
+val configuredVersionName = configValue("GGESIM_VERSION_NAME", "0.7.0").ifBlank { "0.7.0" }
 val releaseKeystorePath = configValue("ANDROID_KEYSTORE_PATH")
 
 android {

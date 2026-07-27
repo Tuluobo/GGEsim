@@ -6,7 +6,7 @@ GGESIM_GUIDE_URL=https://shuzimumin.com/t/topic/102
 
 # Optional release overrides. Keep real signing values in local.properties or CI secrets.
 GGESIM_VERSION_CODE=11
-GGESIM_VERSION_NAME=0.6.0
+GGESIM_VERSION_NAME=0.7.0
 ANDROID_KEYSTORE_PATH=
 ANDROID_KEYSTORE_PASSWORD=
 ANDROID_KEY_ALIAS=
