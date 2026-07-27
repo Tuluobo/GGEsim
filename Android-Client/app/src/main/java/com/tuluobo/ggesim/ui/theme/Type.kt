@@ -2,33 +2,26 @@ package com.tuluobo.ggesim.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Set of Material typography styles to start with
+private val BaseTypography = Typography()
+
+private fun TextStyle.withoutTracking(): TextStyle = copy(letterSpacing = 0.sp)
+
 val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+    displayLarge = BaseTypography.displayLarge.withoutTracking(),
+    displayMedium = BaseTypography.displayMedium.withoutTracking(),
+    displaySmall = BaseTypography.displaySmall.withoutTracking(),
+    headlineLarge = BaseTypography.headlineLarge.withoutTracking(),
+    headlineMedium = BaseTypography.headlineMedium.withoutTracking(),
+    headlineSmall = BaseTypography.headlineSmall.withoutTracking(),
+    titleLarge = BaseTypography.titleLarge.withoutTracking(),
+    titleMedium = BaseTypography.titleMedium.withoutTracking(),
+    titleSmall = BaseTypography.titleSmall.withoutTracking(),
+    bodyLarge = BaseTypography.bodyLarge.withoutTracking(),
+    bodyMedium = BaseTypography.bodyMedium.withoutTracking(),
+    bodySmall = BaseTypography.bodySmall.withoutTracking(),
+    labelLarge = BaseTypography.labelLarge.withoutTracking(),
+    labelMedium = BaseTypography.labelMedium.withoutTracking(),
+    labelSmall = BaseTypography.labelSmall.withoutTracking()
 )

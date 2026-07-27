@@ -3,4 +3,4 @@
     android:antialias="true"
     android:filter="true"
     android:gravity="fill"
-    android:src="@drawable/ic_launcher_artwork" />
+    android:src="@drawable/ic_launcher_monochrome_artwork" />

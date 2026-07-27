@@ -1,0 +1,5 @@
+# Add these values to the untracked local.properties file used by Android Studio.
+# The same names can also be supplied as Gradle properties or environment variables.
+GGESIM_CLIENT_ID=
+GGESIM_CLIENT_SECRET=
+GGESIM_GUIDE_URL=https://shuzimumin.com/t/topic/102

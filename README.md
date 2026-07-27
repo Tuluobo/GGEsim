@@ -14,9 +14,31 @@ Here are some screenshots of the GGEsim application:
 
 ## Features
 
-- Convert physical Giffgaff SIM cards to eSIM
-- Support for iOS devices
-- Simplified eSIM activation process
+- Sign in with Giffgaff OAuth and PKCE, with persisted tokens, automatic refresh,
+  and one retry after an unauthorized response
+- Convert a physical Giffgaff SIM to eSIM through SMS MFA and SIM swap during
+  the supported London service window
+- Order a new eSIM for an account without a SIM, manage saved payment methods,
+  and complete activation through Giffgaff's authenticated web checkout
+- Display the eSIM download QR code and LPA string
+- Export diagnostic logs, open the usage guide, and report network failures
+- Equivalent iOS and Android clients
+
+## Android setup
+
+Open `Android-Client` in Android Studio. Add `GGESIM_CLIENT_ID` and
+`GGESIM_CLIENT_SECRET` to `Android-Client/local.properties`, using
+`Android-Client/local.properties.example` as the template. The Android client
+uses the same Giffgaff OAuth, SIM swap, new eSIM ordering, payment, and QR-code
+flows as the iOS client. Command-line builds require JDK 17 or newer; Android
+Studio's bundled runtime is supported. `GGESIM_GUIDE_URL` is optional and
+defaults to the usage guide below.
+
+With an emulator or device connected, run the complete local verification with:
+
+```shell
+./gradlew testDebugUnitTest connectedDebugAndroidTest lintDebug assembleRelease
+```
 
 ## Usage Instructions
 
