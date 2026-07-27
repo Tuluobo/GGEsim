@@ -4,6 +4,10 @@
 .AppleDouble
 .LSOverride
 
+# Signing keys
+*.jks
+*.keystore
+
 # Icon must end with two \r
 Icon
 

@@ -1,58 +1,234 @@
-name: Build and Package iOS App
+name: Build and Release iOS and Android
 
 on:
   push:
     tags:
-      - "*"
+      - "**"
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  package:
-    name: Build and package iOS app
+  build-ios:
+    name: Build iOS package
     runs-on: macos-latest
+    timeout-minutes: 45
     permissions:
-      contents: write
+      contents: read
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
-    
+      - name: Check out the repository
+        uses: actions/checkout@v6
+
+      - name: Validate release configuration
+        env:
+          GG_CLIENT_ID: ${{ secrets.GG_CLIENT_ID }}
+          GG_CLIENT_SECRET: ${{ secrets.GG_CLIENT_SECRET }}
+          GUIDE_DOC_URL: ${{ secrets.GUIDE_DOC_URL }}
+        run: |
+          test -n "$GG_CLIENT_ID" || { echo "::error::Missing GG_CLIENT_ID secret"; exit 1; }
+          test -n "$GG_CLIENT_SECRET" || { echo "::error::Missing GG_CLIENT_SECRET secret"; exit 1; }
+          test -n "$GUIDE_DOC_URL" || { echo "::error::Missing GUIDE_DOC_URL secret"; exit 1; }
+
       - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode.app
 
-      - name: Modify Info.plist
+      - name: Configure iOS app
+        env:
+          GG_CLIENT_ID: ${{ secrets.GG_CLIENT_ID }}
+          GG_CLIENT_SECRET: ${{ secrets.GG_CLIENT_SECRET }}
+          GUIDE_DOC_URL: ${{ secrets.GUIDE_DOC_URL }}
         run: |
-          /usr/libexec/PlistBuddy -c "Set :kGuideDocURLKey ${{ secrets.GUIDE_DOC_URL }}" ./GGEsim/Info.plist
-          /usr/libexec/PlistBuddy -c "Set :kClientIdKey ${{ secrets.GG_CLIENT_ID }}" ./GGEsim/Info.plist
-          /usr/libexec/PlistBuddy -c "Set :kClientSecretKey ${{ secrets.GG_CLIENT_SECRET }}" ./GGEsim/Info.plist
-      
-      - name: Build iOS app
+          plutil -replace kGuideDocURLKey -string "$GUIDE_DOC_URL" iOS-Client/GGEsim/Info.plist
+          plutil -replace kClientIdKey -string "$GG_CLIENT_ID" iOS-Client/GGEsim/Info.plist
+          plutil -replace kClientSecretKey -string "$GG_CLIENT_SECRET" iOS-Client/GGEsim/Info.plist
+
+      - name: Archive iOS app
+        working-directory: iOS-Client
         run: |
-          xcodebuild clean archive -scheme "GGEsim" -archivePath $PWD/build/GGEsim.xcarchive -sdk iphoneos -configuration Release BUILD_LIBRARIES_FOR_DISTRIBUTION=YES SKIP_INSTALL=NO CODE_SIGNING_ALLOWED=NO
-        
+          xcodebuild clean archive \
+            -project GGEsim.xcodeproj \
+            -scheme GGEsim \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/GGEsim.xcarchive" \
+            BUILD_LIBRARIES_FOR_DISTRIBUTION=YES \
+            SKIP_INSTALL=NO \
+            CODE_SIGNING_ALLOWED=NO
+
       - name: Create IPA
         run: |
-          mkdir -p $PWD/build/Payload
-          cp -R $PWD/build/GGEsim.xcarchive/Products/Applications/GGEsim.app $PWD/build/Payload
-          cd $PWD/build
-          /usr/bin/zip -r GGEsim.ipa Payload
-          rm -rf Payload
-        
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          mkdir -p "$RUNNER_TEMP/Payload" build
+          cp -R "$RUNNER_TEMP/GGEsim.xcarchive/Products/Applications/GGEsim.app" "$RUNNER_TEMP/Payload/"
+          (
+            cd "$RUNNER_TEMP"
+            /usr/bin/zip -qry "$GITHUB_WORKSPACE/build/GGEsim-iOS.ipa" Payload
+          )
+          unzip -t build/GGEsim-iOS.ipa
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload iOS workflow artifact
+        uses: actions/upload-artifact@v7
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/GGEsim.ipa
-          asset_name: GGEsim.ipa
-          asset_content_type: application/octet-stream
+          name: ggesim-ios
+          path: build/GGEsim-iOS.ipa
+          if-no-files-found: error
+          retention-days: 7
+
+  build-android:
+    name: Build Android package
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v6
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Validate release configuration
+        env:
+          GGESIM_CLIENT_ID: ${{ secrets.GG_CLIENT_ID }}
+          GGESIM_CLIENT_SECRET: ${{ secrets.GG_CLIENT_SECRET }}
+          GGESIM_GUIDE_URL: ${{ secrets.GUIDE_DOC_URL }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          test -n "$GGESIM_CLIENT_ID" || { echo "::error::Missing GG_CLIENT_ID secret"; exit 1; }
+          test -n "$GGESIM_CLIENT_SECRET" || { echo "::error::Missing GG_CLIENT_SECRET secret"; exit 1; }
+          test -n "$GGESIM_GUIDE_URL" || { echo "::error::Missing GUIDE_DOC_URL secret"; exit 1; }
+
+          test -n "$ANDROID_KEYSTORE_BASE64" || { echo "::error::Missing ANDROID_KEYSTORE_BASE64 secret"; exit 1; }
+          test -n "$ANDROID_KEYSTORE_PASSWORD" || { echo "::error::Missing ANDROID_KEYSTORE_PASSWORD secret"; exit 1; }
+          test -n "$ANDROID_KEY_ALIAS" || { echo "::error::Missing ANDROID_KEY_ALIAS secret"; exit 1; }
+          test -n "$ANDROID_KEY_PASSWORD" || { echo "::error::Missing ANDROID_KEY_PASSWORD secret"; exit 1; }
+
+      - name: Prepare signed Android release
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          TAG_NAME: ${{ github.ref_name }}
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          keystore_path="$RUNNER_TEMP/ggesim-release.jks"
+          version_name="${TAG_NAME#v}"
+          version_code=$((100000 + RUN_NUMBER))
+
+          test -n "$version_name" || { echo "::error::Tag must contain a version name"; exit 1; }
+          umask 077
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$keystore_path"
+          test -s "$keystore_path"
+          keytool -list \
+            -keystore "$keystore_path" \
+            -storepass:env ANDROID_KEYSTORE_PASSWORD \
+            -alias "$ANDROID_KEY_ALIAS" >/dev/null
+
+          {
+            printf 'ANDROID_KEYSTORE_PATH=%s\n' "$keystore_path"
+            printf 'GGESIM_VERSION_CODE=%s\n' "$version_code"
+            printf 'GGESIM_VERSION_NAME=%s\n' "$version_name"
+          } >> "$GITHUB_ENV"
+
+      - name: Test and build Android app
+        working-directory: Android-Client
+        env:
+          GGESIM_CLIENT_ID: ${{ secrets.GG_CLIENT_ID }}
+          GGESIM_CLIENT_SECRET: ${{ secrets.GG_CLIENT_SECRET }}
+          GGESIM_GUIDE_URL: ${{ secrets.GUIDE_DOC_URL }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: ./gradlew --no-daemon testDebugUnitTest lintRelease assembleRelease
+
+      - name: Verify and collect Android package
+        run: |
+          source_apk="Android-Client/app/build/outputs/apk/release/app-release.apk"
+          android_sdk="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-}}"
+          test -n "$android_sdk" || { echo "::error::Android SDK path is unavailable"; exit 1; }
+          apksigner_path=$(find "$android_sdk/build-tools" -type f -name apksigner | sort -V | tail -n 1)
+
+          test -s "$source_apk"
+          test -x "$apksigner_path"
+          "$apksigner_path" verify --verbose --print-certs "$source_apk"
+
+          mkdir -p build
+          cp "$source_apk" build/GGEsim-Android.apk
+          test -s build/GGEsim-Android.apk
+
+      - name: Upload Android workflow artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ggesim-android
+          path: build/GGEsim-Android.apk
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish GitHub Release
+    needs:
+      - build-ios
+      - build-android
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download iOS package
+        uses: actions/download-artifact@v8
+        with:
+          name: ggesim-ios
+          path: release-assets
+
+      - name: Download Android package
+        uses: actions/download-artifact@v8
+        with:
+          name: ggesim-android
+          path: release-assets
+
+      - name: Verify release assets
+        run: |
+          test -s release-assets/GGEsim-iOS.ipa
+          test -s release-assets/GGEsim-Android.apk
+          (
+            cd release-assets
+            sha256sum GGEsim-iOS.ipa GGEsim-Android.apk > SHA256SUMS.txt
+            sha256sum --check SHA256SUMS.txt
+          )
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release delete-asset "$TAG_NAME" GGEsim-Android-unsigned.apk --yes >/dev/null 2>&1 || true
+            gh release delete-asset "$TAG_NAME" GGEsim.ipa --yes >/dev/null 2>&1 || true
+            gh release upload "$TAG_NAME" \
+              release-assets/GGEsim-iOS.ipa \
+              release-assets/GGEsim-Android.apk \
+              release-assets/SHA256SUMS.txt \
+              --clobber
+          else
+            gh release create "$TAG_NAME" \
+              release-assets/GGEsim-iOS.ipa \
+              release-assets/GGEsim-Android.apk \
+              release-assets/SHA256SUMS.txt \
+              --verify-tag \
+              --title "Release $TAG_NAME" \
+              --generate-notes
+          fi

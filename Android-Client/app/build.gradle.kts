@@ -20,6 +20,17 @@ fun configValue(name: String, default: String = ""): String =
 fun String.asBuildConfigString(): String =
     "\"${replace("\\", "\\\\").replace("\"", "\\\"")}\""
 
+fun requiredConfigValue(name: String): String =
+    configValue(name).takeIf { it.isNotBlank() }
+        ?: error("Missing required release configuration: $name")
+
+val configuredVersionCode = configValue("GGESIM_VERSION_CODE", "11")
+    .toIntOrNull()
+    ?.takeIf { it in 1..2_100_000_000 }
+    ?: error("GGESIM_VERSION_CODE must be an integer between 1 and 2100000000")
+val configuredVersionName = configValue("GGESIM_VERSION_NAME", "0.3.0").ifBlank { "0.3.0" }
+val releaseKeystorePath = configValue("ANDROID_KEYSTORE_PATH")
+
 android {
     namespace = "com.tuluobo.ggesim"
     compileSdk = 36
@@ -28,8 +39,8 @@ android {
         applicationId = "com.tuluobo.ggesim"
         minSdk = 28
         targetSdk = 36
-        versionCode = 11
-        versionName = "0.3.0"
+        versionCode = configuredVersionCode
+        versionName = configuredVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -42,8 +53,20 @@ android {
         )
     }
 
+    signingConfigs {
+        if (releaseKeystorePath.isNotBlank()) {
+            create("release") {
+                storeFile = file(releaseKeystorePath)
+                storePassword = requiredConfigValue("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = requiredConfigValue("ANDROID_KEY_ALIAS")
+                keyPassword = requiredConfigValue("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
