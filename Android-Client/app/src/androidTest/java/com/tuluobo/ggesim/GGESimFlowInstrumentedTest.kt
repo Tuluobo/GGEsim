@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.tuluobo.ggesim.data.CreditProduct
@@ -226,6 +227,44 @@ class GGESimFlowInstrumentedTest {
         )
     }
 
+    @Test
+    fun oauthCallbackLoadsMemberWithoutRestart() {
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        application.getSharedPreferences("ggesim", Context.MODE_PRIVATE)
+            .edit()
+            .clear()
+            .putString("code_verifier", "pkce-verifier")
+            .putString("oauth_state", "expected-state")
+            .commit()
+        val gateway = FakeGateway(
+            member = MemberInfo(MemberProfile("member-6", "new-login"), null)
+        )
+        val viewModel = GGESimViewModel(
+            application = application,
+            api = gateway,
+            now = { Instant.parse("2026-07-27T12:00:00Z") },
+            initialToken = null
+        )
+        show(viewModel)
+
+        composeRule.runOnIdle {
+            viewModel.handleDeepLink(
+                "giffgaff://auth/callback/?code=auth-code&state=expected-state".toUri()
+            )
+        }
+
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            viewModel.memberInfo != null && !viewModel.isMemberLoading
+        }
+        composeRule.onNodeWithText("Hi, new-login").assertIsDisplayed()
+        assertTrue(viewModel.tokenAvailable)
+        assertCallsInOrder(
+            gateway.calls,
+            "exchange:auth-code:pkce-verifier",
+            "member:access-token"
+        )
+    }
+
     private fun testViewModel(gateway: FakeGateway): GGESimViewModel = GGESimViewModel(
         application = ApplicationProvider.getApplicationContext<Application>(),
         api = gateway,
@@ -268,7 +307,8 @@ class GGESimFlowInstrumentedTest {
         val calls: MutableList<String> = Collections.synchronizedList(mutableListOf())
         private var remainingUnauthorizedMemberRequests = unauthorizedMemberRequests
 
-        override fun exchangeAuthorizationCode(code: String, verifier: String): OAuthToken = token()
+        override fun exchangeAuthorizationCode(code: String, verifier: String): OAuthToken =
+            token().also { calls += "exchange:$code:$verifier" }
 
         override fun refreshToken(refreshToken: String): OAuthToken {
             calls += "refresh:$refreshToken"

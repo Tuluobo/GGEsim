@@ -180,6 +180,7 @@ class GGESimViewModel internal constructor(
                         remove(KEY_CODE_VERIFIER)
                         remove(KEY_OAUTH_STATE)
                     }
+                    isMemberLoading = false
                     loadMember()
                 }
                 .onFailure {
