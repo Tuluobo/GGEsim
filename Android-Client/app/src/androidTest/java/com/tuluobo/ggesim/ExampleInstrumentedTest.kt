@@ -24,7 +24,7 @@ class ExampleInstrumentedTest {
         composeRule.onNodeWithText("About GGEsim").performClick()
 
         composeRule.onNodeWithText("GGEsim").assertIsDisplayed()
-        composeRule.onNodeWithText("版本 0.3.0").assertIsDisplayed()
+        composeRule.onNodeWithText("版本 0.6.0").assertIsDisplayed()
         composeRule.onNodeWithText("导出日志").assertIsDisplayed()
 
         composeRule.runOnIdle {
