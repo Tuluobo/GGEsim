@@ -2,12 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>kGuideDocURLKey</key>
-	<string></string>
-	<key>kClientIdKey</key>
-	<string></string>
-	<key>kClientSecretKey</key>
-	<string></string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -21,5 +15,11 @@
 			</array>
 		</dict>
 	</array>
+	<key>kClientIdKey</key>
+	<string>4a05bf219b3985647d9b9a3ba610a9ce</string>
+	<key>kClientSecretKey</key>
+	<string>OQv4cfiyol8TvCW4yiLGj0c1AkTR3N2JfRzq7XGqMxk=</string>
+	<key>kGuideDocURLKey</key>
+	<string>https://lian.to/s/guide</string>
 </dict>
 </plist>

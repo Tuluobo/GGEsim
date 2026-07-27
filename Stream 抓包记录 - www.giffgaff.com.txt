@@ -1,0 +1,68 @@
+>> 本文件内容为 https://www.giffgaff.com/auth/login?device=app&redirect=https%3A%2F%2Fid.giffgaff.com%2Fauth%2Foauth%2Fauthorize%3Fclient_id%3De72540d04bfd3651c2f12998d3919a54%26state%3D4f7ea76a-89b5-4a62-8aa8-739f65f9c1a3%26response_type%3Dcode%26scope%3Dread%26code_challenge_method%3DS256%26code_challenge%3D8s5TY5aPrQ3LmJNwf62MdGNS8qmVQUGJWrnUFLNzkt8%26redirect_uri%3Dgiffgaff%3A%2F%2Fauth%2Fcallback%2F 的请求抓包详情，供您分析和定位问题。
+
+1. 请求内容 Request:
+
+GET /auth/login?device=app&redirect=https%3A%2F%2Fid.giffgaff.com%2Fauth%2Foauth%2Fauthorize%3Fclient_id%3De72540d04bfd3651c2f12998d3919a54%26state%3D4f7ea76a-89b5-4a62-8aa8-739f65f9c1a3%26response_type%3Dcode%26scope%3Dread%26code_challenge_method%3DS256%26code_challenge%3D8s5TY5aPrQ3LmJNwf62MdGNS8qmVQUGJWrnUFLNzkt8%26redirect_uri%3Dgiffgaff%3A%2F%2Fauth%2Fcallback%2F HTTP/1.1
+Host: www.giffgaff.com
+Sec-Fetch-Dest: document
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Mobile/15E148 Safari/604.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Accept-Language: en-US,en;q=0.9
+Priority: u=0, i
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+
+GET /auth/static/styles/app-styles.css HTTP/1.1
+Host: www.giffgaff.com
+Sec-Fetch-Dest: style
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Mobile/15E148 Safari/604.1
+Accept: text/css,*/*;q=0.1
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Accept-Language: en-US,en;q=0.9
+Priority: u=1, i
+Accept-Encoding: gzip, deflate, br, zstd
+Cookie: JSESSIONID=NDM0YzdjYzAtYzEzZS00NTlmLWIyOGMtNGI5ZTMzZjVlMDg4; XSRF-TOKEN=6f46d7ab-7f24-4dd8-b26e-a12614689103; incap_ses_1385_457687=pKSmaM7JmWCe4APzpII4E4sk22kAAAAAzvX7wMJNy40Z6oB/7cNahw==; incap_ses_1385_925109=UtTPGyFBUEeg4APzpII4E4sk22kAAAAAQc9POZmaF2nbI4vga0/BvQ==; incap_ses_705_2118422=piCgZ6zQtStOxNJWDqrICYwk22kAAAAAGQzaXor+UZuYd5m/P62Oew==; nlbi_2118422=UCJ6BDxzbj10cRFaT/2kEAAAAACWCOCwa4VPz25TpoDfF6iA; visid_incap_2118422=5McTXeUNRhW6o+5wR8pLO4sk22kAAAAAQUIPAAAAAABXf42QRMjiKmzGn51oOm6T; visid_incap_457687=0zlSBNyUQiW4QhjqmcXKdYsk22kAAAAAQUIPAAAAAABd4jICj9rBf12uDzQcAg4z; visid_incap_925109=uSo4Iu3ERMyRLiW+HhGHuIsk22kAAAAAQUIPAAAAAAA0zQIz5IYWaVm03OQkOC8t
+Connection: keep-alive
+
+
+
+2. 响应内容 Response:
+
+HTTP/1.1 200 OK
+accept-ranges: bytes
+cache-control: public, max-age=0, max-age=1209600
+content-encoding: gzip
+content-type: text/css; charset=UTF-8
+cross-origin-opener-policy: same-origin-allow-popups
+cross-origin-resource-policy: cross-origin
+date: Sun, 12 Apr 2026 04:50:20 GMT
+expires: Sun, 26 Apr 2026 04:50:20 GMT
+last-modified: Thu, 09 Apr 2026 15:14:21 GMT
+origin-agent-cluster: ?1
+referrer-policy: no-referrer
+server: istio-envoy
+strict-transport-security: max-age=60
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: Accept-Encoding
+x-content-type-options: nosniff
+x-content-type-options: nosniff
+x-dns-prefetch-control: off
+x-download-options: noopen
+x-envoy-upstream-service-time: 15
+x-frame-options: SAMEORIGIN
+x-frame-options: SAMEORIGIN
+x-permitted-cross-domain-policies: none
+x-xss-protection: 1; mode=block
+x-xss-protection: 0
+Content-Length: 4878
+Connection: keep-alive
+X-CDN: Imperva
+X-Iinfo: 50-29421875-29421924 SNNN RT(1775969419590 1238) q(0 0 0 -1) r(2 2) U12
+
+[此处非文本，暂不支持显示]
+
+====
+该记录由 Stream 抓取，仅用于分析和学习，可 AppStore 搜索『抓包』下载，面向开发者永久免费使用。
